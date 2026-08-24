@@ -1,0 +1,22 @@
+{
+  "name": "studysphere-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "StudySphere - All-in-one AI-powered student ecosystem",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev -w apps/web",
+    "dev:api": "npm run dev -w apps/api",
+    "build:web": "npm run build -w apps/web",
+    "build:api": "npm run build -w apps/api",
+    "db:generate": "npm run db:generate -w apps/api",
+    "db:migrate": "npm run db:migrate -w apps/api"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4",
+    "concurrently": "^8.2.2"
+  }
+}

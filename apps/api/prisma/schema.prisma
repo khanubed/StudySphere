@@ -1,0 +1,132 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  student
+  faculty
+  alumni
+  admin
+}
+
+model User {
+  id             String        @id @default(uuid())
+  email          String        @unique
+  passwordHash   String
+  name           String
+  role           Role          @default(student)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  
+  institutionId  String?
+  institution    Institution?  @relation(fields: [institutionId], references: [id])
+  
+  resources      Resource[]
+  likes          Like[]
+  bookmarks      Bookmark[]
+  comments       Comment[]
+  aiGenerations  AIGeneration[]
+  plannerTasks   PlannerTask[]
+  auditLogs      AuditLog[]
+}
+
+model Institution {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  users     User[]
+}
+
+model Resource {
+  id           String      @id @default(uuid())
+  title        String
+  subject      String
+  type         String
+  fileUrl      String
+  status       String      @default("pending") // pending, published, rejected
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  
+  authorId     String
+  author       User        @relation(fields: [authorId], references: [id])
+  
+  likes        Like[]
+  bookmarks    Bookmark[]
+  comments     Comment[]
+}
+
+model Like {
+  id         String   @id @default(uuid())
+  userId     String
+  resourceId String
+  createdAt  DateTime @default(now())
+  
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, resourceId])
+}
+
+model Bookmark {
+  id         String   @id @default(uuid())
+  userId     String
+  resourceId String
+  createdAt  DateTime @default(now())
+  
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, resourceId])
+}
+
+model Comment {
+  id         String   @id @default(uuid())
+  content    String
+  userId     String
+  resourceId String
+  createdAt  DateTime @default(now())
+  
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+}
+
+model AIGeneration {
+  id         String   @id @default(uuid())
+  feature    String // summarizer, quiz, planner, resume
+  status     String   @default("queued") // queued, complete, failed
+  tokensUsed Int      @default(0)
+  createdAt  DateTime @default(now())
+  
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+}
+
+model PlannerTask {
+  id          String   @id @default(uuid())
+  title       String
+  dueDate     DateTime
+  isCompleted Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  action    String
+  entity    String
+  entityId  String
+  meta      Json?
+  createdAt DateTime @default(now())
+  
+  actorId   String
+  actor     User     @relation(fields: [actorId], references: [id])
+}
