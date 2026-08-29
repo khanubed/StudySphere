@@ -16,7 +16,17 @@
     "db:migrate": "npm run db:migrate -w apps/api"
   },
   "devDependencies": {
-    "typescript": "^5.5.4",
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "prettier-plugin-tailwindcss": "^0.5.14",
+    "tailwindcss": "^3.4.19"
+  },
+  "overrides": {
+    "react-native": "0.81.5",
+    "react-native-reanimated": "~4.1.1",
+    "react-native-worklets": "0.5.1",
+    "react-native-safe-area-context": "~5.6.0"
   }
 }

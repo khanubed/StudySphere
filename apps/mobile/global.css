@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 243 244 239;
+    --foreground: 18 21 28;
+    
+    --ink: 18 21 28;
+    --paper: 243 244 239;
+    --quad: 47 93 80;
+    --marker: 242 193 78;
+    --chalk: 91 127 222;
+    --graphite: 138 141 133;
+    
+    --primary: 47 93 80;
+    --primary-foreground: 243 244 239;
+    
+    --secondary: 220 222 214;
+    --secondary-foreground: 18 21 28;
+    
+    --muted: 220 222 214;
+    --muted-foreground: 138 141 133;
+    
+    --accent: 242 193 78;
+    --accent-foreground: 18 21 28;
+    
+    --destructive: 185 28 28;
+    --destructive-foreground: 243 244 239;
+    
+    --card: 243 244 239;
+    --card-foreground: 18 21 28;
+    
+    --popover: 243 244 239;
+    --popover-foreground: 18 21 28;
+    
+    --border: 200 203 194;
+    --input: 200 203 194;
+    --ring: 47 93 80;
+    
+    --success: 47 93 80;
+    --warning: 242 193 78;
+    
+    --radius: 0.5rem;
+    --radius-modal: 1rem;
+  }
+
+  .dark {
+    --background: 18 21 28;
+    --foreground: 243 244 239;
+    
+    --ink: 243 244 239;
+    --paper: 18 21 28;
+    --quad: 76 160 138;
+    --marker: 242 193 78;
+    --chalk: 130 160 240;
+    --graphite: 160 162 155;
+    
+    --primary: 76 160 138;
+    --primary-foreground: 18 21 28;
+    
+    --secondary: 35 38 44;
+    --secondary-foreground: 243 244 239;
+    
+    --muted: 35 38 44;
+    --muted-foreground: 160 162 155;
+    
+    --accent: 242 193 78;
+    --accent-foreground: 18 21 28;
+    
+    --destructive: 239 68 68;
+    --destructive-foreground: 18 21 28;
+    
+    --card: 28 31 38;
+    --card-foreground: 243 244 239;
+    
+    --popover: 28 31 38;
+    --popover-foreground: 243 244 239;
+    
+    --border: 55 58 53;
+    --input: 55 58 53;
+    --ring: 76 160 138;
+    
+    --success: 76 160 138;
+    --warning: 242 193 78;
+  }
+}

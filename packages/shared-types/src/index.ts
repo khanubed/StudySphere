@@ -1,24 +1,13 @@
-export interface ApiResponse<T = any> {
-  success: boolean;
-  data?: T;
-  message?: string;
-  errors?: Record<string, string[]>;
-}
-
-export type UserRole = 'student' | 'faculty' | 'alumni' | 'admin';
-
-export interface UserProfile {
-  id: string;
-  email: string;
-  name: string;
-  role: UserRole;
-  institutionId?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface TokenUsage {
-  used: number;
-  limit: number;
-  resetAt: string;
-}
+export * from './common.js';
+export * from './user.js';
+export * from './resource.js';
+export * from './academic.js';
+export * from './ai.js';
+export * from './planner.js';
+export * from './career.js';
+export * from './coding.js';
+export * from './liveQuiz.js';
+export * from './faculty.js';
+export * from './billing.js';
+export * from './notifications.js';
+export * from './admin.js';
