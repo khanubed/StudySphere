@@ -23,10 +23,10 @@ import {
   Check,
   CheckCircle2,
 } from 'lucide-react-native';
-import { ThemeToggle } from '../../src/components/ThemeToggle';
 import { QuizDifficulty, QuizQuestionType } from '@studysphere/shared-types';
 
 export default function AIQuizSetupScreen() {
+
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -115,8 +115,9 @@ export default function AIQuizSetupScreen() {
           <Text className="font-mono text-[9px] text-graphite uppercase">Assessment Desk</Text>
         </View>
 
-        <ThemeToggle size={13} className="w-7 h-7" />
+        <View className="w-7 h-7" />
       </View>
+
 
       <ScrollView className="flex-1 px-4 py-3 space-y-3" showsVerticalScrollIndicator={false}>
         

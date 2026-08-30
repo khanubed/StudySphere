@@ -17,9 +17,9 @@ import {
   Search,
   ArrowRight,
 } from 'lucide-react-native';
-import { ThemeToggle } from '../../src/components/ThemeToggle';
 
 export default function QuizHistoryScreen() {
+
   const router = useRouter();
   const { data: historyResponse, isLoading } = useGetQuizHistoryQuery();
   const [searchQuery, setSearchQuery] = useState('');
@@ -46,8 +46,9 @@ export default function QuizHistoryScreen() {
           <Text className="font-mono text-[9px] text-graphite uppercase">Audit Ledger</Text>
         </View>
 
-        <ThemeToggle size={13} className="w-7 h-7" />
+        <View className="w-7 h-7" />
       </View>
+
 
       <ScrollView className="flex-1 px-4 py-3 space-y-3" showsVerticalScrollIndicator={false}>
         

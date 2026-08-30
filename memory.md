@@ -164,9 +164,50 @@ StudySphere/
 - **Mobile Guided Review Studio (`apps/mobile/app/ai/assignment-helper.tsx`)**:
   - Top Step Chain & token quota pill, manuscript input with live telemetry, segmented tabs (`Scorecard`, `Issues`, `Citations`, `Structure`), interactive issue cards with bottom-sheet diff modals (`Accept Fix ✓`, `Dismiss`), and one-click citation copy actions.
 
+### AI Adaptive Study Planner & Revision Engine (`flows/Study-Planner.md`)
+- **Shared Data & Types (`packages/shared-types`, `packages/shared-data`)**:
+  - Added types: `StudySessionItem`, `WeeklyScheduleDay`, `RevisionMilestone`, `MockTestSuggestion`, `SubjectReadiness`, `StudyPlan`, `GenerateStudyPlanRequest`, `StudyPatternType`, `SessionStatusType`, `SessionActivityType`.
+  - Built academic mock datasets in `planner.mock.ts` with 4 semester courses (DBMS, OS, Algo, CN), hour-by-hour timeline, Mon-Sun weekly macro distribution, spaced repetition milestones (T-7d, T-3d, T-1d), and diagnostic mock test suggestions.
+- **Web Academic Mission Control Dashboard (`apps/web/src/pages/StudyPlanner.tsx` at `/planner`)**:
+  - Top Overview Row: 5-card metric row (Active courses, nearest exam countdown, daily study meter, study streak, readiness index).
+  - Signature AI Step Chain: `[ 01 SUBJECTS ] → [ 02 EXAMS ] → [ 03 ANALYSIS ] → [ 04 DISTRIBUTION ] → [ 05 REVISION ] → [ 06 PLAN READY ]`.
+  - Interactive Course Manager & Modal: Modify Course Code, Title, Exam Date, Syllabus Weight %, and Target Mastery Benchmark (%). Add new custom courses or delete subjects with live rebalancing.
+  - Left Column (420px): `PlannerInputCard` with course weightings, daily bandwidth slider (0.5h - 12h), chronotype selector (Morning/Evening/Balanced/Weekend), adaptive sync checkboxes, and `[ Generate Adaptive Plan — 60 Credits ↗ ]`.
+  - Right Column (980px):
+    - Section 1: Today's Hourly Study Timeline (`DailyScheduleCard`) with interactive actions (`Complete ✓`, `Skip ✗`, `Open Notes ↗`) and one-click `[ Rebalance ↷ ]`.
+    - Section 2: Weekly Schedule Macro Board with Mon–Sun distribution.
+    - Section 3: Spaced Revision Roadmap (`RevisionTimeline` T-7d deep slides, T-3d high-yield PYQs, T-1d formula sheets).
+    - Section 4: Diagnostic Mock Test Recommendations with `[ Accept & Schedule ↗ ]` routing to `/ai/quiz/new`.
+    - Section 5: Subject Readiness & Exam Countdowns.
+- **Mobile Guided Study Planner (`apps/mobile/app/ai/planner.tsx`)**:
+  - 100% feature parity with Web:
+    - Top bar with export schedule, token usage indicator (880 cr), and plan archive.
+    - Horizontal scrollable AI Step Chain (`[ 01 SUBJECTS ] → [ 02 EXAMS ] → [ 03 ANALYSIS ] → [ 04 DISTRIBUTION ] → [ 05 REVISION ] → [ 06 READY ]`).
+    - 6-tab guided navigation (`Today`, `Subjects`, `Week`, `Revision`, `Mock Tests`, `Analytics`).
+    - Native Course Modifier Modal: Edit course code, name, exam date, and weight %; add/remove custom subjects.
+    - Daily bandwidth buttons (3h, 4.5h, 6h, 8h, 10h), Chronotype selection, and one-tap `[ Generate Adaptive Plan (60 cr) ↗ ]`.
+    - Interactive session completion/skip actions, weekly roadmap, spaced repetition cards, and one-click mock test launchers.
+
+
+
+
 
 - **Mobile Application (`apps/mobile/app/`)**:
-  - `(tabs)/dashboard.tsx`: Complete parity with Web Dashboard — Academic Semester Picker modal (`Semester 5 Active`, `Sem 4`, `Sem 3`), Academic Performance Snapshot carousel (CGPA 9.12, Attendance 89.5%, Quiz Avg 91.4%, Submissions 14/16), Multi-range Analytical Engine with chart tabs (`Study Hours & AI`, `Subject Scores`, `Topic Accuracy`) and focus composition stacked bar, interactive Daily Tasks checklist with strike-through and stamp marks, Upcoming Deadlines timetable, Semantic AI Stack transformations with token telemetry, Academic Audit Log timeline, Cohort Leaderboard (Hall of Fame), and Academic AI Suite launchpad.
+  - `global.css` & `tailwind.config.js`: Switched to `darkMode: "media"` and defined `@media (prefers-color-scheme: dark)` root variables alongside `:root`. NativeWind now automatically responds directly to the OS/device system appearance (Light / Dark mode) with 100% token consistency.
+  - Removed all manual `ThemeToggle` UI controls from headers across all mobile screens for a cleaner, unified system-driven experience.
+  - `(tabs)/_layout.tsx`: Dynamic tab bar height with safe area insets (`52 + insets.bottom`) and native haptic feedback (`expo-haptics`).
+  - `(tabs)/dashboard.tsx`: Streamlined, uncluttered Academic Cockpit layout:
+
+    1. Top Identity Bar: User greeting, semester selector (`Semester 5 Active`), theme toggle, profile avatar.
+    2. Active Study Streak & Token Balance pill (`12d 🔥`, `880 cr`).
+    3. Quick Action 2x2 Grid placed at the very top: `AI Summarizer` (`/ai/summarizer`), `AI Quiz Hall` (`/ai/quiz-setup`), `Study Planner` (`/ai/planner`), `Assignment Studio` (`/ai/assignment-helper`), with a direct shortcut to `All 6 Tools →`.
+    4. Compact Academic Scorecard horizontal carousel: CGPA (`9.12`), Attendance (`89.5%`), Quiz Avg (`91.4%`), Deadlines (`2 Due`).
+    5. Actionable Today's Tasks checklist with strike-through and stamp marks.
+    6. Upcoming Timetable & Deadlines with countdown badges.
+    7. Cohort Leaderboard (Top 4 Scholars podium).
+    8. Analytical Engine & Graphs cleanly situated at the bottom: Multi-range telemetry (`7d`, `30d`, `90d`, `1y`), chart tabs (`Study Hours & AI`, `Subject Scores`, `Topic Accuracy`), and stacked study focus distribution bar.
+    9. Bottom Hub Shortcuts (`Coding Hub`, `Resource Hub`).
+
   - `ai/quiz-setup.tsx`: Full feature parity with Web — Top AI Step Chain (`SOURCE → EXTRACT → EXAM READY`), 3 academic source cards (Topic Text, Upload PDF, Resource Hub), multi-format chips (`MCQ`, `True/False`, `Fill Blanks`, `Short Recall`, `Proofs`) with Select All, difficulty tiers, question counts (5-30), timer duration selector, and live pre-flight token estimation.
   - `ai/quiz-attempt.tsx`: Single-column exam simulation with sticky top exam hall bar, active countdown timer badge with <2 min alerts, scrollable Question Navigator Ribbon and full grid modal, MCQ/True-False/Fill-in/Short-Answer inputs, review flag toggles, and Submit Audit Modal.
   - `ai/quiz-results.tsx`: Honors scorecard with cohort percentile standing, granular Weak Area Syllabus Diagnostics with one-click **Remediation Flashcard** generator hooks, and full question review ledger with model explanations.
@@ -190,9 +231,10 @@ StudySphere/
 ---
 
 ## 5. Build & Verification Status
-- **Web App**: `npm run build:web` (`tsc -b && vite build`) passes with **0 errors** and bundles 2,894 modules.
+- **Web App**: `npm run build:web` (`tsc -b && vite build`) passes with **0 errors** and bundles 2,895 modules.
 - **Mobile App**: `npx tsc --noEmit` passes with **0 errors**.
 - **Shared Packages**: `packages/shared-types`, `packages/shared-schemas`, and `packages/shared-data` compile with **0 errors**.
+
 
 
 

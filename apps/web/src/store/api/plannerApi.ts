@@ -3,7 +3,12 @@ import {
   PlannerTask,
   StudySession,
   ApiResponse,
+  StudyPlan,
+  GenerateStudyPlanRequest,
+  StudySessionItem,
+  SessionStatusType,
 } from '@studysphere/shared-types';
+import { mockStudyPlan, mockTodayStudySessions } from '@studysphere/shared-data';
 
 export interface CreateTaskRequest {
   title: string;
@@ -28,6 +33,83 @@ export interface RegeneratePlanRequest {
 
 export const plannerApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    // Study Plan Queries and Mutations
+    getStudyPlan: builder.query<ApiResponse<StudyPlan>, void>({
+      queryFn: async () => {
+        return {
+          data: {
+            success: true,
+            data: mockStudyPlan,
+            message: 'Active study plan loaded',
+            timestamp: new Date().toISOString(),
+          },
+        };
+      },
+      providesTags: [{ type: 'Planner', id: 'STUDY_PLAN' }],
+    }),
+
+    generateAdaptivePlan: builder.mutation<ApiResponse<StudyPlan>, GenerateStudyPlanRequest>({
+      queryFn: async (req) => {
+        const updatedPlan: StudyPlan = {
+          ...mockStudyPlan,
+          id: `plan-${Date.now()}`,
+          dailyHours: req.dailyHours || 6.0,
+          preferredPattern: req.preferredPattern || 'morning',
+          readinessScore: Math.min(100, mockStudyPlan.readinessScore + 4),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+
+        return {
+          data: {
+            success: true,
+            data: updatedPlan,
+            message: 'Adaptive study plan generated successfully',
+            timestamp: new Date().toISOString(),
+          },
+        };
+      },
+      invalidatesTags: [{ type: 'Planner', id: 'STUDY_PLAN' }, 'Dashboard'],
+    }),
+
+    updateStudySessionStatus: builder.mutation<
+      ApiResponse<StudySessionItem>,
+      { sessionId: string; status: SessionStatusType }
+    >({
+      queryFn: async ({ sessionId, status }) => {
+        const session = mockTodayStudySessions.find((s) => s.id === sessionId);
+        if (session) {
+          session.status = status;
+          if (status === 'completed') {
+            session.completedAt = new Date().toISOString();
+          }
+        }
+        return {
+          data: {
+            success: true,
+            data: session || mockTodayStudySessions[0],
+            message: `Session marked as ${status}`,
+            timestamp: new Date().toISOString(),
+          },
+        };
+      },
+      invalidatesTags: [{ type: 'Planner', id: 'STUDY_PLAN' }, 'Dashboard'],
+    }),
+
+    rebalanceWeeklyPlan: builder.mutation<ApiResponse<StudyPlan>, void>({
+      queryFn: async () => {
+        return {
+          data: {
+            success: true,
+            data: mockStudyPlan,
+            message: 'Weekly schedule rebalanced across remaining study slots',
+            timestamp: new Date().toISOString(),
+          },
+        };
+      },
+      invalidatesTags: [{ type: 'Planner', id: 'STUDY_PLAN' }, 'Dashboard'],
+    }),
+
     getTasks: builder.query<
       ApiResponse<PlannerTask[]>,
       { date?: string; status?: string } | void
@@ -131,6 +213,10 @@ export const plannerApi = baseApi.injectEndpoints({
 });
 
 export const {
+  useGetStudyPlanQuery,
+  useGenerateAdaptivePlanMutation,
+  useUpdateStudySessionStatusMutation,
+  useRebalanceWeeklyPlanMutation,
   useGetTasksQuery,
   useCreateTaskMutation,
   useUpdateTaskMutation,

@@ -10,9 +10,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useAnalyzeResumeMutation } from '../../src/store/api/aiApi';
 import { ChevronLeft, Briefcase, Sparkles, CheckCircle2, AlertCircle } from 'lucide-react-native';
-import { ThemeToggle } from '../../src/components/ThemeToggle';
 
 export default function AIResumeAnalyzerScreen() {
+
   const router = useRouter();
   const [targetRole, setTargetRole] = useState('Full Stack Software Engineer');
   const [resumeText, setResumeText] = useState(
@@ -64,8 +64,9 @@ export default function AIResumeAnalyzerScreen() {
           <Text className="font-mono text-xs font-semibold text-ink">Back</Text>
         </TouchableOpacity>
         <Text className="font-sans text-base font-bold text-ink">Resume Analyzer</Text>
-        <ThemeToggle size={13} className="w-7 h-7" />
+        <View className="w-7 h-7" />
       </View>
+
 
       <ScrollView className="flex-1 px-4 py-4 space-y-4" showsVerticalScrollIndicator={false}>
         <View className="p-4 rounded-md border border-border/80 bg-paper space-y-3 shadow-xs">

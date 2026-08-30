@@ -30,10 +30,10 @@ import {
   BookOpen,
   GraduationCap,
 } from 'lucide-react-native';
-import { ThemeToggle } from '../../src/components/ThemeToggle';
 import { CitationStyleType, GrammarIssue } from '@studysphere/shared-types';
 
 export default function AIAssignmentHelperScreen() {
+
   const router = useRouter();
 
   // State
@@ -96,8 +96,9 @@ export default function AIAssignmentHelperScreen() {
           <Text className="font-mono text-[9px] text-graphite uppercase">Peer Review Desk</Text>
         </View>
 
-        <ThemeToggle size={13} className="w-7 h-7" />
+        <View className="w-7 h-7" />
       </View>
+
 
       <ScrollView className="flex-1 px-4 py-3 space-y-3" showsVerticalScrollIndicator={false}>
         

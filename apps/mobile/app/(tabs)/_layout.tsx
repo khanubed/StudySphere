@@ -1,6 +1,8 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
-import { useColorScheme } from 'nativewind';
+import { useColorScheme } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import * as Haptics from 'expo-haptics';
 import { useAppSelector } from '../../src/store/hooks';
 import {
   LayoutDashboard,
@@ -13,13 +15,24 @@ import {
 
 export default function TabsLayout() {
   const { user } = useAppSelector((state) => state.auth);
-  const reduxTheme = useAppSelector((state) => state.ui.theme);
-  const { colorScheme } = useColorScheme();
-  const isDark = colorScheme === 'dark' || reduxTheme === 'dark';
+  const systemColorScheme = useColorScheme();
+  const insets = useSafeAreaInsets();
+
+  const isDark = systemColorScheme === 'dark';
   const isFaculty = user?.role === 'faculty';
+
+  // Dynamic height and padding calculation taking system navigation bar into account
+  const bottomInset = insets.bottom;
+  const tabHeight = 52 + bottomInset;
+  const paddingBottom = bottomInset > 0 ? bottomInset : 8;
 
   return (
     <Tabs
+      screenListeners={{
+        tabPress: () => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        },
+      }}
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: isDark ? '#4CA08A' : '#2F5D50',
@@ -28,8 +41,8 @@ export default function TabsLayout() {
           borderTopWidth: 1,
           borderTopColor: isDark ? '#373A35' : 'rgba(200, 203, 194, 0.8)',
           backgroundColor: isDark ? '#12151C' : '#F3F4EF',
-          height: 60,
-          paddingBottom: 8,
+          height: tabHeight,
+          paddingBottom: paddingBottom,
           paddingTop: 6,
         },
         tabBarLabelStyle: {

@@ -42,9 +42,8 @@ import {
 } from 'lucide-react-native';
 import { Resource, ResourceType, LeaderboardScope, ResourceStatus } from '@studysphere/shared-types';
 
-import { ThemeToggle } from '../../src/components/ThemeToggle';
-
 type TabView = 'catalog' | 'leaderboard' | 'my_submissions';
+
 
 export default function MobileResources() {
   const [activeTab, setActiveTab] = useState<TabView>('catalog');
@@ -227,7 +226,6 @@ export default function MobileResources() {
           </View>
 
           <View className="flex-row items-center gap-1.5">
-            <ThemeToggle size={13} className="w-7 h-7" />
             <TouchableOpacity
               onPress={() => setModalVisible(true)}
               className="flex-row items-center gap-1 bg-quad px-2.5 py-1 rounded-[4px]"
@@ -238,6 +236,7 @@ export default function MobileResources() {
               </Text>
             </TouchableOpacity>
           </View>
+
         </View>
 
         <Text className="font-sans text-xl font-bold text-ink">Resource Hub</Text>

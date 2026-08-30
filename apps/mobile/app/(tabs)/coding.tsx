@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Code, Terminal, ChevronRight } from 'lucide-react-native';
-import { ThemeToggle } from '../../src/components/ThemeToggle';
 
 export default function MobileCoding() {
   const tracks = [
@@ -13,7 +12,7 @@ export default function MobileCoding() {
 
   return (
     <SafeAreaView className="flex-1 bg-paper">
-      {/* ── 1. HEADER & THEME TOGGLE ─────────────────────────────────── */}
+      {/* ── 1. HEADER ─────────────────────────────────────────────────── */}
       <View className="px-4 py-3 bg-paper border-b border-border/60 flex-row justify-between items-center">
         <View>
           <View className="flex-row items-center gap-1.5 mb-0.5">
@@ -25,9 +24,8 @@ export default function MobileCoding() {
           </View>
           <Text className="font-sans text-xl font-bold text-ink">Coding Hub</Text>
         </View>
-
-        <ThemeToggle />
       </View>
+
 
       {/* ── 2. TRACKS STREAM ─────────────────────────────────────────── */}
       <ScrollView className="flex-1 px-4 py-3 space-y-3" showsVerticalScrollIndicator={false}>

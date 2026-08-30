@@ -21,9 +21,9 @@ import {
   History,
   CheckCircle2,
 } from 'lucide-react-native';
-import { ThemeToggle } from '../../src/components/ThemeToggle';
 
 export default function MobileAIToolsHub() {
+
   const router = useRouter();
   const { data: tokenUsageResponse } = useGetTokenUsageQuery();
   const { data: sessionsResponse } = useGetAISummarizerSessionsQuery();
@@ -115,13 +115,10 @@ export default function MobileAIToolsHub() {
               {tokenUsage.limit - tokenUsage.used} TOKENS
             </Text>
           </View>
-
-          <View className="flex-row items-center gap-1.5">
-            <ThemeToggle size={13} className="w-7 h-7" />
-          </View>
         </View>
 
         <Text className="font-sans text-2xl font-bold text-ink">Academic AI Hub</Text>
+
         <Text className="font-sans text-xs text-graphite mt-0.5">
           Select an academic tool to synthesize notes, self-test, plan, or audit.
         </Text>

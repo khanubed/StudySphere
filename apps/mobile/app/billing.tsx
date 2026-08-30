@@ -3,7 +3,6 @@ import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { ChevronLeft, Coins, Check, Sparkles } from 'lucide-react-native';
-import { ThemeToggle } from '../src/components/ThemeToggle';
 
 export default function BillingScreen() {
   const router = useRouter();
@@ -19,8 +18,9 @@ export default function BillingScreen() {
           <Text className="font-mono text-xs font-semibold text-ink">Back</Text>
         </TouchableOpacity>
         <Text className="font-sans text-base font-bold text-ink">Token Ledger</Text>
-        <ThemeToggle size={13} className="w-7 h-7" />
+        <View className="w-7 h-7" />
       </View>
+
 
       <ScrollView className="flex-1 px-4 py-4 space-y-4" showsVerticalScrollIndicator={false}>
         {/* Token Balance */}
