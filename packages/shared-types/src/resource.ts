@@ -10,23 +10,34 @@ export type ResourceType =
   | 'lab_manual'
   | 'research_paper';
 
-export type ResourceStatus = 'pending' | 'published' | 'rejected';
+export type ResourceStatus = 'pending' | 'published' | 'changes_requested' | 'rejected';
+
+export interface ResourceFileMetadata {
+  driveFileId: string;
+  fileName: string;
+  fileSizeFormatted?: string;
+  mimeType?: string;
+}
 
 export interface Resource extends BaseEntity {
   uploadedBy: string;
   uploader?: UserProfile;
   subjectId: string;
+  semester?: number;
   title: string;
   type: ResourceType;
   fileUrl?: string | null;
   driveLink?: string | null;
+  fileMetadata?: ResourceFileMetadata;
   tags?: string[];
   description?: string | null;
   status: ResourceStatus;
   verifiedBy?: string | null;
   rejectionReason?: string | null;
+  moderationFeedback?: string | null;
   likesCount?: number;
   bookmarksCount?: number;
+  downloadsCount?: number;
   commentsCount?: number;
 }
 
@@ -83,7 +94,12 @@ export interface LeaderboardEntry {
     id: string;
     name: string;
     avatarUrl?: string;
+    branch?: string;
+    semester?: string;
   };
   points: number;
   badge?: BadgeTier;
+  resourcesCount?: number;
+  downloadsGenerated?: number;
+  verified?: boolean;
 }

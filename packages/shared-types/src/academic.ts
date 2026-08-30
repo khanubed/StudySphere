@@ -41,7 +41,7 @@ export interface AssignmentSubmission extends BaseEntity {
 }
 
 export type QuizSource = 'ai' | 'manual';
-export type QuizQuestionType = 'mcq' | 'fill_blank' | 'short_answer' | 'true_false';
+export type QuizQuestionType = 'mcq' | 'fill_blank' | 'short_answer' | 'true_false' | 'conceptual';
 export type QuizDifficulty = 'easy' | 'medium' | 'hard' | 'mixed';
 
 export interface QuizQuestionOption {
@@ -57,6 +57,9 @@ export interface QuizQuestion extends BaseEntity {
   correctAnswer?: string | string[] | null;
   explanation?: string | null;
   topicTag?: string | null;
+  marks?: number;
+  difficulty?: QuizDifficulty;
+  citation?: string | null;
 }
 
 export interface Quiz extends BaseEntity {
@@ -69,6 +72,8 @@ export interface Quiz extends BaseEntity {
   difficulty: QuizDifficulty;
   timeLimitMinutes?: number | null;
   questions?: QuizQuestion[];
+  tokensUsed?: number;
+  topicsCovered?: string[];
 }
 
 export interface QuizAttemptAnswer {
@@ -88,22 +93,51 @@ export interface QuizAttempt extends BaseEntity {
   startedAt: string;
   submittedAt?: string | null;
   answers?: QuizAttemptAnswer[];
+  timeTakenSeconds?: number;
+}
+
+export interface WeakTopicAnalysis {
+  topic: string;
+  totalQuestions: number;
+  correctCount: number;
+  accuracyPercentage: number;
+  masteryStatus: 'mastered' | 'proficient' | 'needs_revision';
 }
 
 export interface QuizResult {
   attemptId: string;
   quizId: string;
+  quizTitle?: string;
   score: number;
+  totalMarks?: number;
   totalQuestions: number;
   correctCount: number;
+  incorrectCount?: number;
+  skippedCount?: number;
   accuracy: number;
   timeTakenSeconds: number;
+  percentile?: number;
+  rank?: number;
+  weakTopics?: WeakTopicAnalysis[];
   answers: {
     questionId: string;
     prompt: string;
+    type?: QuizQuestionType;
     selectedAnswer: string | string[];
     correctAnswer: string | string[];
     isCorrect: boolean;
     explanation?: string;
+    topicTag?: string;
+    citation?: string;
   }[];
+}
+
+export interface QuizGenerationRequest {
+  source: 'upload' | 'resource' | 'topic_text';
+  sourceRef: string;
+  fileName?: string;
+  questionTypes: QuizQuestionType[];
+  difficulty: QuizDifficulty;
+  questionCount: number;
+  timeLimitMinutes?: number;
 }

@@ -1,98 +1,107 @@
-# Design.md — Visual Design System (v2)
+# StudySphere — Visual Design System & Design Thinking (v2: Academic OS Ledger)
 
-## What changed from v1
+## 1. Design Vision & Philosophy
 
-The old system (violet primary, cyan accent, Notion/Linear reference) has been replaced with the **Ledger** system — the same design language now built into the landing page CSS (`--ink`, `--paper`, `--quad`, `--marker`, `--chalk`, `--graphite`). This doc is the source of truth those tokens were pulled from; the landing page code and this spec should stay in sync going forward, and `packages/ui-tokens` should mirror these values exactly rather than reintroducing the old palette anywhere in the app.
+Modern college students juggle 7–10 disjointed tools (Google Drive, WhatsApp groups, Notion, Chegg, LinkedIn, Resume builders, university portals). This creates continuous cognitive overhead and scattered academic records.
 
-Two fonts have been added: **Geist**, for the product UI itself, and **Geist Mono**, its monospace sibling, for in-app data. Reasoning for both is in §5.
+**StudySphere is built on the concept of the Academic OS Ledger:**
+- **The Ledger Metaphor:** The entire platform reads as an active, verifiable academic ledger — clean hairline dividers, tabular monospace figures, chronological timestamps, and crisp checkmark stamp marks (`✓`).
+- **High Information Density with Calm Restraint:** Eliminates noisy SaaS gradients, oversized cartoon illustrations, and decorative bloat. Surfaces are flat, structured, and intentional.
+- **Three Clear Typographic Registers:**
+  1. **Editorial Display (Fraunces):** High-character serif used selectively for hero and major milestone headlines.
+  2. **Product UI & Operations (Geist):** Clean, crisp, high-legibility geometric sans for dashboards, headers, forms, and navigation.
+  3. **Long-Form Reading (Inter):** Generous, comfortable body typesetting for study notes, flashcards, AI summaries, and explanations.
+  4. **Data & Code (Geist Mono & IBM Plex Mono):** Monospace precision for live telemetry tickers, token counts, timestamps, step sequences, and syntax highlighting.
 
-## 1. Direction
-Calm, focused, premium-feeling productivity tool — but built on a specific idea, not a generic "clean SaaS" reference. StudySphere turns a student's scattered academic life into one running record, so the whole product — marketing site and app alike — reads as a **ledger**: hairline rules, monospace data, entries over time. High information density done cleanly on dashboard/analytics surfaces, generous comfort on content-heavy surfaces (Resource Hub, notes, AI output). Tokens shared between web (Tailwind) and mobile (NativeWind) via `packages/ui-tokens` — one source of truth, not two design systems, and not two different palettes between marketing and product either.
+---
 
-## 2. Branding
-- Logo direction: a simple geometric mark — the existing orbit/node concept still works, but re-render it single-color in Quad green on Paper (not gradient-dependent), so it sits naturally next to the mono wordmark and the ledger checkmark motif (`.stamp-mark` in the landing CSS) used for verified/completed states elsewhere in the product.
-- Design philosophy: Apple-like attention to spacing/hierarchy on marketing/onboarding surfaces; utilitarian density on dashboard/analytics surfaces; comfortable, unhurried typesetting in long-form content (notes, AI summaries) — the same three registers as before, now expressed through Fraunces/Geist/Inter rather than borrowed reference sites.
+## 2. Shared Token Architecture
 
-## 3. Color Tokens — Light Mode
+All design tokens are synchronized across web (Tailwind CSS) and mobile (NativeWind / React Native) via `@studysphere/ui-tokens` and shared CSS variables.
 
-`--ink` and `--paper` are **role tokens**, not fixed hex values — they invert between light and dark mode rather than being redefined per-component. In light mode, Ink is the dark/text role and Paper is the light/background role.
+### Color Tokens — Light Mode (Paper Base)
 
-| Token | RGB | Hex | Usage |
-|---|---|---|---|
-| `--background` / `--paper` | `243 244 239` | `#F3F4EF` | Page background |
-| `--foreground` / `--ink` | `18 21 28` | `#12151C` | Primary text |
-| `--primary` / `--quad` | `47 93 80` | `#2F5D50` | CTAs, active nav, links, brand accents |
-| `--secondary` / `--muted` | `220 222 214` | `#DCDED6` | Secondary buttons, chips, section backgrounds |
-| `--muted-foreground` / `--graphite` | `138 141 133` | `#8A8D85` | Secondary text, captions, timestamps |
-| `--accent` / `--marker` | `242 193 78` | `#F2C14E` | Sparing highlight only — never body text color, contrast fails there |
-| `--chalk` | `91 127 222` | `#5B7FDE` | Reserved specifically for AI-generated content and AI badges — a semantic signal, not a general accent |
-| `--border` / `--input` | `200 203 194` | `#C8CBC2` | Dividers, card/input borders |
-| `--destructive` | `185 28 28` | `#B91C1C` | Errors, rejected content, delete actions |
-| `--success` | `47 93 80` (= Quad) | `#2F5D50` | Correct answers, verified badges — intentionally reuses Quad rather than a separate green |
-| `--warning` | `242 193 78` (= Marker) | `#F2C14E` | Token-limit warnings, pending moderation |
+`--ink` and `--paper` are **role tokens** that invert between light and dark modes rather than being hardcoded per surface.
 
-## 4. Color Tokens — Dark Mode
+| Token | CSS Variable | RGB Value | Hex Code | Semantic Role & Usage Guidelines |
+|---|---|---|---|---|
+| **Paper** | `--paper` / `--background` / `--card` | `243 244 239` | `#F3F4EF` | Default surface background. Cool, slightly grey-green off-white paper tone. |
+| **Ink** | `--ink` / `--foreground` | `18 21 28` | `#12151C` | Primary text and dark brand accents. Near-black with subtle cool slate undertone. |
+| **Quad** | `--quad` / `--primary` / `--success` | `47 93 80` | `#2F5D50` | Primary action CTA, active navigation indicators, verified stamp marks (`✓`), and correct quiz states. Deep academic green. |
+| **Marker** | `--marker` / `--accent` / `--warning` | `242 193 78` | `#F2C14E` | Highlighter yellow for annotations (`.marker-highlight`), warning badges, and token alerts. Never used as body text. |
+| **Chalk** | `--chalk` | `91 127 222` | `#5B7FDE` | **Reserved exclusively for AI-generated features** (AI Notes Summarizer, Quiz Generator, Resume Analyzer step chains, AI badges). |
+| **Graphite** | `--graphite` / `--muted-foreground` | `138 141 133` | `#8A8D85` | Secondary text, timestamps, step counters (`01`, `02`), metadata labels, table captions. |
+| **Secondary** | `--secondary` / `--muted` | `220 222 214` | `#DCDED6` | Subdued pill buttons, card hover backgrounds, subtle table headers. |
+| **Border** | `--border` / `--input` | `200 203 194` | `#C8CBC2` | Hairline border rules (1px), input container borders, grid lines. |
+| **Destructive** | `--destructive` | `185 28 28` | `#B91C1C` | Errors, negative quiz feedback, destructive delete dialogs. |
 
-| Token | RGB | Hex | Usage |
-|---|---|---|---|
-| `--background` / `--paper` | `18 21 28` | `#12151C` | Page background |
-| `--foreground` / `--ink` | `243 244 239` | `#F3F4EF` | Primary text |
-| `--primary` / `--quad` | `76 160 138` | `#4CA08A` | Brightened for dark-background contrast |
-| `--secondary` / `--muted` | `35 38 44` | `#23262C` | Secondary buttons, chips, section backgrounds |
-| `--muted-foreground` / `--graphite` | `160 162 155` | `#A0A29B` | Secondary text, captions, timestamps |
-| `--accent` / `--marker` | `242 193 78` | `#F2C14E` | Unchanged — stays legible on dark backgrounds as-is |
-| `--chalk` | `130 160 240` | `#82A0F0` | AI-specific signal, brightened for dark mode |
-| `--card` / `--popover` | `28 31 38` | `#1C1F26` | Elevated surfaces (cards, modals, popovers) |
-| `--border` / `--input` | `55 58 53` | `#373A35` | Dividers, card/input borders |
-| `--destructive` | `239 68 68` | `#EF4444` | Errors, rejected content, delete actions |
-| `--success` | `76 160 138` (= Quad) | `#4CA08A` | Correct answers, verified badges |
-| `--warning` | `242 193 78` (= Marker) | `#F2C14E` | Token-limit warnings, pending moderation |
+---
 
-Default: respects system preference on first visit; user override persists after that (mechanism unchanged, §7).
+### Color Tokens — Dark Mode (Ink Base)
 
-## 5. Typography
+In Dark Mode, the canvas transforms into an ink-black academic slate.
 
-Four faces, each with one job — don't blur these roles by reaching for Fraunces in the product or Geist on the marketing site.
+| Token | CSS Variable | RGB Value | Hex Code | Semantic Role & Adaptation in Dark Mode |
+|---|---|---|---|---|
+| **Paper** | `--paper` / `--background` | `18 21 28` | `#12151C` | Dark page canvas. |
+| **Card / Popover** | `--card` / `--popover` | `28 31 38` | `#1C1F26` | Elevated dark surfaces, modals, popovers, ledger containers. |
+| **Ink** | `--ink` / `--foreground` | `243 244 239` | `#F3F4EF` | High-contrast off-white foreground text. |
+| **Quad** | `--quad` / `--primary` / `--success` | `76 160 138` | `#4CA08A` | Brightened emerald sage for legibility on dark slate. |
+| **Marker** | `--marker` / `--accent` / `--warning` | `242 193 78` | `#F2C14E` | Highlighter yellow (remains vibrant on dark background). |
+| **Chalk** | `--chalk` | `130 160 240` | `#82A0F0` | Brightened periwinkle blue for AI feature badges and step flows. |
+| **Graphite** | `--graphite` / `--muted-foreground` | `160 162 155` | `#A0A29B` | Muted graphite grey for secondary info and captions. |
+| **Secondary** | `--secondary` / `--muted` | `35 38 44` | `#23262C` | Muted dark secondary buttons and chips. |
+| **Border** | `--border` / `--input` | `55 58 53` | `#373A35` | Subtle dark hairline borders. |
+| **Destructive** | `--destructive` | `239 68 68` | `#EF4444` | High-visibility warning/error red. |
 
-| Role | Font | Where | Size / Weight / Line-height |
-|---|---|---|---|
-| Display | **Fraunces** | Marketing site only — landing hero, section titles, final CTA | 72–96px hero / 40–48px section titles, tight tracking |
-| Product UI | **Geist** | In-app: nav, sidebar, dashboard headers, buttons, in-product H1–H4 | 20–32px / 600–700 / 1.25 |
-| Body / Reading | **Inter** | Long-form reading everywhere: notes, AI summaries, descriptions, marketing subcopy | 14–18px / 400–500 / 1.6 (generous — long study sessions) |
-| Data / Mono | **Geist Mono** | In-app data: ledger-style stat rows, token usage, timestamps, table figures | 13–15px / 400, slightly wider tracking |
-| Code | **IBM Plex Mono** | Coding Hub code blocks specifically | 13–14px / 400 / 1.5 |
+---
 
-**Why Geist, specifically:** the original spec left product headings ambiguous ("Geist or Inter Display"). Geist is built for exactly this job — dense UI text at small-to-mid sizes, which is most of what the app actually shows — so it now owns that role outright, distinct from Fraunces (which is reserved for the marketing site's larger, slower-paced display moments).
+## 3. Typography System & Rules
 
-**Why Geist Mono, specifically, as the second addition:** the landing page already uses IBM Plex Mono for its ledger motif. Rather than pull that same face into every in-app data element, Geist Mono — Geist's purpose-built monospace sibling — takes over in-product data display (token counters, timestamps, stat rows), so the app's numbers read as part of the same modern system as its Geist headings. IBM Plex Mono narrows to one job it's genuinely well-suited for: Coding Hub code blocks, where a recognizable "programming font" is actually what students expect to see.
+| Role | Font Family | Class Name | Weight & Tracking | Primary Use Cases |
+|---|---|---|---|---|
+| **Display** | Fraunces, Georgia, serif | `font-display` | 700 / 800, `-0.02em` tracking | Marketing hero, major section headlines (`H1`, `H2`), key testimonial quote marks. |
+| **Product UI** | Geist, sans-serif | `font-sans` | 500 / 600, normal tracking | In-app headers, sidebars, navigation bars, buttons, tab menus, form labels. |
+| **Body** | Inter, sans-serif | `font-body` | 400 / 500, `1.6` line-height | Long-form study notes, course descriptions, AI output paragraphs, marketing subtext. |
+| **Data / Telemetry** | Geist Mono, monospace | `font-mono` | 400 / 600, `+0.05em` tracking | Ticker metrics, stats, step numbers, timestamps, ledger headers, verified tags. |
+| **Code** | IBM Plex Mono, monospace | `font-code` | 400 / 500 | Syntax highlighting in Coding Hub and programming problem sets. |
 
-## 6. Spacing & Layout Rules
-- 4px base spacing scale (4/8/12/16/24/32/48/64/96) — no arbitrary values, on either platform.
-- Radius: `0.5rem` (8px) as the base `--radius` token, applied consistently to inputs, buttons, and cards — matching the hairline-bordered, less-rounded feel of the ledger system. Reserve a larger radius (`1rem`) only for modals, and full pill for badges/tags. (This tightens the previous card radius of `0.75rem` — the softer rounding read at odds with the hairline-border aesthetic once the two systems sat side by side.)
-- Elevation: flat + border-based by default; `shadow-md` reserved for modals/popovers/dropdowns only — keeps the dense dashboard calm and consistent with the landing page's flat, rule-divided surfaces.
-- Web container: `max-w-7xl` centered; app shell uses a fixed sidebar (240–280px, collapsible) + fluid content.
-- Mobile: bottom tab bar (5 items max), safe-area-aware, no sidebar pattern.
+---
 
-## 7. Dark/Light Mode Mechanism
-- Web: Tailwind `darkMode: 'class'`, `uiSlice.theme` persisted via redux-persist + localStorage, inline pre-hydration script avoids flash-of-wrong-theme.
-- Mobile: NativeWind's `useColorScheme` bridged to the same `uiSlice.theme`, persisted via redux-persist + AsyncStorage, defaults to system preference on first launch.
-- Default: respects system preference on first visit; user override persists after that.
+## 4. Spacing, Borders & Elevation
 
-## 8. Component Styling Notes
-| Component | Notes |
-|---|---|
-| `<AIResponseCard>` | Left border or background wash in `--chalk`, not the generic `--accent` — Chalk is reserved specifically for AI-originated content, so the color itself signals "this came from the model," consistent with the marketing site's AI Features section |
-| `<TokenUsageIndicator>` | Pill in the topbar; `--graphite` above 50% remaining, `--warning` (Marker) under 20%, `--destructive` at 0 with a link to `/billing` |
-| Cards (resource/quiz/job) | `--card` bg (mirrors `--background` on mobile), 1px `--border`, hover elevation on web only (no hover state on mobile — use press opacity instead) |
-| Badges (contributor tiers) | Bronze/Silver/Gold/Platinum/Diamond — distinct icon + color per tier, not just a color swap, since these are a core engagement/status signal |
-| Quiz question states | unanswered (`--border`), answered (`--primary`/Quad ring), locked/time-up (`--muted`), reviewed correct/incorrect (`--success`/`--destructive`) — correct reuses Quad deliberately, so "correct" and "primary action" read as the same positive green throughout the product |
+1. **4px Grid System:** `4px` (`spacing.1`), `8px` (`spacing.2`), `12px` (`spacing.3`), `16px` (`spacing.4`), `24px` (`spacing.6`), `32px` (`spacing.8`), `48px` (`spacing.12`), `64px` (`spacing.16`).
+2. **Hairline Border Rules:** Surfaces use 1px solid borders (`border-border/60` to `border-border`) rather than heavy dropshadows.
+3. **Border Radius:**
+   - Base buttons / inputs / standard cards: `rounded-[6px]` or `0.5rem` (`rounded-md`).
+   - Outer container / ledger panels: `rounded-[8px]`.
+   - Modals / floating dialogs: `rounded-[16px]` (`1rem`).
+   - Badges / chips: Full pill (`rounded-full`) or stamp box (`rounded-[2px]`).
+4. **Elevation:**
+   - Flat by default (`shadow-none`).
+   - Subtle interactive lift: `shadow-sm` on hover.
+   - Popovers/modals: `shadow-md` or `shadow-lg` with subtle backdrop blur (`backdrop-blur-md`).
 
-## 9. Imagery & Content Tone
-- AI-generated visuals (mind maps, charts) should read as clearly AI-assisted but polished — not sterile, not gimmicky. Where a visual needs to signal "AI-made," lean on `--chalk`, not a generic sparkle icon.
-- Illustrations for empty states: friendly, minimal line-art in Ink/Graphite, consistent with the ledger's restrained, mono-adjacent tone — avoid generic stock-illustration packs, and avoid anything that reads as a different visual system from the rest of the product (no rounded-blob-character illustrations next to hairline-bordered ledger tables).
+---
 
-## 10. Accessibility
-- Maintain WCAG AA contrast in both themes — check specifically: `--graphite` text on `--background`, `--quad` on `--background` (both modes), and `--chalk` on `--background`. `--marker` (yellow) is a highlight/background color only — never set it as text color on Paper, it won't clear AA at body-text sizes.
-- Every interactive element keyboard-navigable (web) with a visible focus ring (`ring-2 ring-ring ring-offset-2`, matching the landing page's focus treatment); mobile touch targets minimum 44×44px.
-- Alt text / accessibility labels required on every image and icon-only button, on both platforms.
-- `prefers-reduced-motion` respected everywhere, matching the landing page's baseline: animations reduce to `0.01ms` duration rather than being removed outright, so end states still render correctly.
+## 5. Signature Component Patterns (from Landing Page)
+
+1. **Academic Live Ledger (`Hero` & telemetry):**
+   - Monospace uppercase label + verified checkmark (`✓`) + animated count-up numerical values.
+   - Ticking state updates simulating continuous background sync.
+2. **AI Semantic Step Chains (`AIFeatures`):**
+   - Distinctive Chalk Blue badge capsules (`.chalk-step` / `border-chalk/40 bg-chalk/5 text-chalk`) linked by animated arrow dividers.
+3. **Highlighter Annotations (`.marker-highlight`):**
+   - Soft yellow bottom-wash highlight for key phrases in descriptions.
+4. **Stamp Mark Indicator (`.stamp-mark`):**
+   - Compact `w-5 h-5` square box with Quad green border and `✓` symbol.
+5. **Background Grid Gridlines (`.ledger-grid-bg` / `bg-ledger-grid`):**
+   - Monospaced 32px or 24px subtle grid lines for hero/CTA backdrops.
+
+---
+
+## 6. Accessibility & Motion Guidelines
+
+- **Contrast Ratios:** All text combinations exceed WCAG AA 4.5:1. Marker yellow is strictly a highlight/background fill, never body text.
+- **Reduced Motion:** When `prefers-reduced-motion: reduce` is active, CSS and Framer Motion gracefully scale durations to instant (`0.01ms`), avoiding layout shifts while preserving final render states.
+- **Focus Rings:** Visible keyboard navigation focus rings (`focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2`).

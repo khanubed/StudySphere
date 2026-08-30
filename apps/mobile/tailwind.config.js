@@ -83,11 +83,11 @@ module.exports = {
         warning: "rgb(var(--warning))",
       },
       fontFamily: {
-        display: ["var(--font-display)", "Fraunces", "Georgia", "serif"],
-        sans: ["var(--font-sans)", "Geist", "system-ui", "sans-serif"],
-        body: ["var(--font-body)", "Inter", "system-ui", "sans-serif"],
-        mono: ["var(--font-mono)", "Geist Mono", "SF Mono", "monospace"],
-        code: ["var(--font-code)", "IBM Plex Mono", "monospace"],
+        display: 'System',
+        sans: 'System',
+        body: 'System',
+        mono: 'monospace',
+        code: 'monospace',
       },
       borderRadius: {
         lg: "var(--radius-modal, 1rem)",
