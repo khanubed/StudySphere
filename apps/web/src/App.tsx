@@ -17,8 +17,12 @@ import { Dashboard } from './pages/Dashboard';
 import { ResourceHub } from './pages/ResourceHub';
 import { ResourceDetail } from './pages/ResourceDetail';
 import { ResourceUpload } from './pages/ResourceUpload';
+import { ResourceLeaderboard } from './pages/ResourceLeaderboard';
+import { MyResources } from './pages/MyResources';
+import { AIToolsHub } from './pages/AIToolsHub';
 import { AISummarizer } from './pages/AISummarizer';
 import { AIQuizNew } from './pages/AIQuizNew';
+import { AIQuizHistory } from './pages/AIQuizHistory';
 import { AIAssignmentHelper } from './pages/AIAssignmentHelper';
 import { AIResumeAnalyzer } from './pages/AIResumeAnalyzer';
 import { QuizAttempt } from './pages/QuizAttempt';
@@ -106,8 +110,13 @@ export const App: React.FC = () => {
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="resources" element={<ResourceHub />} />
         <Route path="resources/upload" element={<ResourceUpload />} />
+        <Route path="resources/leaderboard" element={<ResourceLeaderboard />} />
+        <Route path="resources/my-resources" element={<MyResources />} />
+        <Route path="ai" element={<AIToolsHub />} />
+        <Route path="ai/tools" element={<AIToolsHub />} />
         <Route path="ai/summarizer" element={<AISummarizer />} />
         <Route path="ai/quiz/new" element={<AIQuizNew />} />
+        <Route path="ai/quiz/history" element={<AIQuizHistory />} />
         <Route path="ai/assignment-helper" element={<AIAssignmentHelper />} />
         <Route path="ai/resume-analyzer" element={<AIResumeAnalyzer />} />
         <Route path="quiz/:id/attempt" element={<QuizAttempt />} />

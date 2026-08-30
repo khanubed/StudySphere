@@ -2,39 +2,21 @@ import { baseApi } from './baseApi';
 import {
   Quiz,
   QuizAttempt,
+  QuizResult,
   ApiResponse,
   PaginatedResponse,
+  QuizGenerationRequest,
 } from '@studysphere/shared-types';
+import {
+  mockQuizzes,
+  mockQuizAttempts,
+  mockQuizResults,
+} from '@studysphere/shared-data';
 
 export interface SubmitQuizRequest {
   quizId: string;
   answers: Record<string, string | number | boolean | string[]>;
   timeSpentSeconds?: number;
-}
-
-export interface QuizAttemptResult {
-  attemptId: string;
-  quizId: string;
-  score: number;
-  maxScore: number;
-  percentage: number;
-  feedback: Array<{
-    questionId: string;
-    isCorrect: boolean;
-    correctAnswer: any;
-    explanation?: string;
-  }>;
-}
-
-export interface QuizAnalytics {
-  totalAttempts: number;
-  averageScore: number;
-  strongTopics: string[];
-  weakTopics: string[];
-  history: Array<{
-    date: string;
-    score: number;
-  }>;
 }
 
 export const quizApi = baseApi.injectEndpoints({
@@ -43,93 +25,143 @@ export const quizApi = baseApi.injectEndpoints({
       ApiResponse<PaginatedResponse<Quiz>>,
       { subjectId?: string; page?: number; pageSize?: number } | void
     >({
-      query: (params) => ({
-        url: '/quizzes',
-        params: params || {},
-      }),
-      providesTags: (result) =>
-        result?.data?.items
-      ? [
-              ...result.data.items.map(({ id }) => ({
-                type: 'Quiz' as const,
-                id,
-              })),
-              { type: 'Quiz', id: 'LIST' },
-            ]
-      : [{ type: 'Quiz', id: 'LIST' }],
+      queryFn: async () => {
+        return {
+          data: {
+            success: true,
+            data: {
+              items: mockQuizzes,
+              total: mockQuizzes.length,
+              page: 1,
+              pageSize: 20,
+              totalPages: 1,
+              hasMore: false,
+            },
+            message: 'Quizzes retrieved',
+            timestamp: new Date().toISOString(),
+          },
+        };
+      },
+      providesTags: ['Quiz'],
     }),
+
     getQuizById: builder.query<ApiResponse<Quiz>, string>({
-      query: (id) => `/quizzes/${id}`,
+      queryFn: async (id) => {
+        const quiz = mockQuizzes.find((q) => q.id === id) || mockQuizzes[0];
+        return {
+          data: {
+            success: true,
+            data: quiz,
+            message: 'Quiz details loaded',
+            timestamp: new Date().toISOString(),
+          },
+        };
+      },
       providesTags: (_result, _error, id) => [{ type: 'Quiz', id }],
     }),
+
+    generateAIQuiz: builder.mutation<
+      ApiResponse<Quiz>,
+      QuizGenerationRequest
+    >({
+      queryFn: async (req) => {
+        const newQuiz: Quiz = {
+          id: `quiz-${Date.now()}`,
+          subjectId: 'sub-ai-gen',
+          createdBy: 'usr-stu-001',
+          title: req.source === 'topic_text' ? req.sourceRef : req.fileName || 'Synthesized Academic Assessment',
+          source: 'ai',
+          questionCount: req.questionCount || 10,
+          difficulty: req.difficulty,
+          timeLimitMinutes: req.timeLimitMinutes || Math.round((req.questionCount || 10) * 1.5),
+          tokensUsed: (req.questionCount || 10) * 14,
+          topicsCovered: ['Core Definitions', 'Theorems & Proofs', 'Applied Problems'],
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          questions: mockQuizzes[0].questions?.slice(0, req.questionCount || 5),
+        };
+
+        mockQuizzes.unshift(newQuiz);
+
+        return {
+          data: {
+            success: true,
+            data: newQuiz,
+            message: 'AI Assessment generated successfully',
+            timestamp: new Date().toISOString(),
+          },
+        };
+      },
+      invalidatesTags: ['Quiz', 'Dashboard'],
+    }),
+
     startQuizAttempt: builder.mutation<
-      ApiResponse<{ attemptId: string; startedAt: string }>,
+      ApiResponse<{ attemptId: string; startedAt: string; quiz: Quiz }>,
       string
     >({
-      query: (quizId) => ({
-        url: `/quizzes/${quizId}/attempts`,
-        method: 'POST',
-      }),
+      queryFn: async (quizId) => {
+        const quiz = mockQuizzes.find((q) => q.id === quizId) || mockQuizzes[0];
+        const attemptId = `attempt-${Date.now()}`;
+        return {
+          data: {
+            success: true,
+            data: {
+              attemptId,
+              startedAt: new Date().toISOString(),
+              quiz,
+            },
+            message: 'Assessment attempt started',
+            timestamp: new Date().toISOString(),
+          },
+        };
+      },
       invalidatesTags: ['Quiz', 'Dashboard'],
     }),
-    submitQuizAnswer: builder.mutation<
-      ApiResponse<null>,
-      {
-        quizId: string;
-        attemptId: string;
-        questionId: string;
-        answer: string | number | boolean | string[];
-      }
-    >({
-      query: ({ quizId, attemptId, ...body }) => ({
-        url: `/quizzes/${quizId}/attempts/${attemptId}/answer`,
-        method: 'PATCH',
-        body,
-      }),
-    }),
-    finalizeQuizAttempt: builder.mutation<
-      ApiResponse<QuizAttemptResult>,
-      { quizId: string; attemptId: string }
-    >({
-      query: ({ quizId, attemptId }) => ({
-        url: `/quizzes/${quizId}/attempts/${attemptId}/submit`,
-        method: 'POST',
-      }),
-      invalidatesTags: ['Quiz', 'Dashboard'],
-    }),
+
     submitQuizAttempt: builder.mutation<
-      ApiResponse<QuizAttemptResult>,
+      ApiResponse<QuizResult>,
       SubmitQuizRequest
     >({
-      query: (body) => ({
-        url: `/quizzes/${body.quizId}/attempt`,
-        method: 'POST',
-        body,
-      }),
+      queryFn: async (_body) => {
+        const result = mockQuizResults['attempt-001'];
+        return {
+          data: {
+            success: true,
+            data: result,
+            message: 'Assessment graded successfully',
+            timestamp: new Date().toISOString(),
+          },
+        };
+      },
       invalidatesTags: ['Quiz', 'Dashboard'],
     }),
-    getQuizAttemptResult: builder.query<ApiResponse<QuizAttemptResult>, string>({
-      query: (attemptId) => `/quizzes/attempts/${attemptId}`,
-      providesTags: (_result, _error, attemptId) => [
-        { type: 'Quiz', id: `ATTEMPT_${attemptId}` },
-      ],
+
+    getQuizResult: builder.query<ApiResponse<QuizResult>, string>({
+      queryFn: async (attemptId) => {
+        const result = mockQuizResults[attemptId] || mockQuizResults['attempt-001'];
+        return {
+          data: {
+            success: true,
+            data: result,
+            message: 'Assessment results retrieved',
+            timestamp: new Date().toISOString(),
+          },
+        };
+      },
+      providesTags: (_result, _error, id) => [{ type: 'Quiz', id }],
     }),
-    getQuizResult: builder.query<
-      ApiResponse<QuizAttemptResult>,
-      { quizId: string; attemptId: string }
-    >({
-      query: ({ quizId, attemptId }) =>
-        `/quizzes/${quizId}/attempts/${attemptId}/result`,
-      providesTags: (_result, _error, { attemptId }) => [
-        { type: 'Quiz', id: `ATTEMPT_${attemptId}` },
-      ],
-    }),
-    getQuizAnalytics: builder.query<ApiResponse<QuizAnalytics>, void>({
-      query: () => '/quizzes/analytics',
-      providesTags: [{ type: 'Quiz', id: 'ANALYTICS' }],
-    }),
+
     getQuizHistory: builder.query<ApiResponse<QuizAttempt[]>, void>({
-      query: () => '/quizzes/history',
+      queryFn: async () => {
+        return {
+          data: {
+            success: true,
+            data: mockQuizAttempts,
+            message: 'Quiz history ledger retrieved',
+            timestamp: new Date().toISOString(),
+          },
+        };
+      },
       providesTags: [{ type: 'Quiz', id: 'HISTORY' }],
     }),
   }),
@@ -139,12 +171,9 @@ export const quizApi = baseApi.injectEndpoints({
 export const {
   useGetQuizzesQuery,
   useGetQuizByIdQuery,
+  useGenerateAIQuizMutation,
   useStartQuizAttemptMutation,
-  useSubmitQuizAnswerMutation,
-  useFinalizeQuizAttemptMutation,
   useSubmitQuizAttemptMutation,
-  useGetQuizAttemptResultQuery,
   useGetQuizResultQuery,
-  useGetQuizAnalyticsQuery,
   useGetQuizHistoryQuery,
 } = quizApi;

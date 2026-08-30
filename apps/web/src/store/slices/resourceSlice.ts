@@ -1,12 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ResourceType, ResourceStatus, LeaderboardScope } from '@studysphere/shared-types';
 
 export interface ResourceFilterState {
   searchQuery: string;
   selectedBranch: string | null;
   selectedSemester: number | null;
   selectedSubject: string | null;
-  resourceType: string | null;
+  resourceType: ResourceType | 'all';
+  verificationFilter: 'all' | 'verified' | 'faculty';
   sortBy: 'latest' | 'popular' | 'downloads' | 'rating';
+  leaderboardScope: LeaderboardScope;
+  myResourcesTab: ResourceStatus | 'all';
 }
 
 const initialState: ResourceFilterState = {
@@ -14,8 +18,11 @@ const initialState: ResourceFilterState = {
   selectedBranch: null,
   selectedSemester: null,
   selectedSubject: null,
-  resourceType: null,
+  resourceType: 'all',
+  verificationFilter: 'all',
   sortBy: 'latest',
+  leaderboardScope: 'weekly',
+  myResourcesTab: 'all',
 };
 
 export const resourceSlice = createSlice({
@@ -34,8 +41,14 @@ export const resourceSlice = createSlice({
     setSelectedSubject: (state, action: PayloadAction<string | null>) => {
       state.selectedSubject = action.payload;
     },
-    setResourceType: (state, action: PayloadAction<string | null>) => {
+    setResourceType: (state, action: PayloadAction<ResourceType | 'all'>) => {
       state.resourceType = action.payload;
+    },
+    setVerificationFilter: (
+      state,
+      action: PayloadAction<'all' | 'verified' | 'faculty'>
+    ) => {
+      state.verificationFilter = action.payload;
     },
     setSortBy: (
       state,
@@ -43,7 +56,24 @@ export const resourceSlice = createSlice({
     ) => {
       state.sortBy = action.payload;
     },
-    resetResourceFilters: () => initialState,
+    setLeaderboardScope: (state, action: PayloadAction<LeaderboardScope>) => {
+      state.leaderboardScope = action.payload;
+    },
+    setMyResourcesTab: (
+      state,
+      action: PayloadAction<ResourceStatus | 'all'>
+    ) => {
+      state.myResourcesTab = action.payload;
+    },
+    resetResourceFilters: (state) => {
+      state.searchQuery = '';
+      state.selectedBranch = null;
+      state.selectedSemester = null;
+      state.selectedSubject = null;
+      state.resourceType = 'all';
+      state.verificationFilter = 'all';
+      state.sortBy = 'latest';
+    },
   },
 });
 
@@ -53,8 +83,12 @@ export const {
   setSelectedSemester,
   setSelectedSubject,
   setResourceType,
+  setVerificationFilter,
   setSortBy,
+  setLeaderboardScope,
+  setMyResourcesTab,
   resetResourceFilters,
 } = resourceSlice.actions;
 
 export default resourceSlice.reducer;
+

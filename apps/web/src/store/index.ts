@@ -8,6 +8,7 @@ import resourceReducer from './slices/resourceSlice';
 import careerReducer from './slices/careerSlice';
 import codingHubReducer from './slices/codingHubSlice';
 import notificationReducer from './slices/notificationSlice';
+import summarizerReducer from './slices/summarizerSlice';
 import { baseApi } from './api/baseApi';
 
 export const store = configureStore({
@@ -20,6 +21,7 @@ export const store = configureStore({
     career: careerReducer,
     codingHub: codingHubReducer,
     notification: notificationReducer,
+    summarizer: summarizerReducer,
     [baseApi.reducerPath]: baseApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -42,4 +44,5 @@ export * from './slices/resourceSlice';
 export * from './slices/careerSlice';
 export * from './slices/codingHubSlice';
 export * from './slices/notificationSlice';
+export * from './slices/summarizerSlice';
 export * from './api';

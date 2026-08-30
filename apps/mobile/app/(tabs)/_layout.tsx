@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
+import { useColorScheme } from 'nativewind';
 import { useAppSelector } from '../../src/store/hooks';
 import {
   LayoutDashboard,
@@ -12,25 +13,29 @@ import {
 
 export default function TabsLayout() {
   const { user } = useAppSelector((state) => state.auth);
+  const reduxTheme = useAppSelector((state) => state.ui.theme);
+  const { colorScheme } = useColorScheme();
+  const isDark = colorScheme === 'dark' || reduxTheme === 'dark';
   const isFaculty = user?.role === 'faculty';
 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#4f46e5',
-        tabBarInactiveTintColor: '#6b7280',
+        tabBarActiveTintColor: isDark ? '#4CA08A' : '#2F5D50',
+        tabBarInactiveTintColor: isDark ? '#A0A29B' : '#8A8D85',
         tabBarStyle: {
           borderTopWidth: 1,
-          borderTopColor: '#f3f4f6',
-          backgroundColor: '#ffffff',
+          borderTopColor: isDark ? '#373A35' : 'rgba(200, 203, 194, 0.8)',
+          backgroundColor: isDark ? '#12151C' : '#F3F4EF',
           height: 60,
           paddingBottom: 8,
           paddingTop: 6,
         },
         tabBarLabelStyle: {
           fontSize: 10,
-          fontWeight: '600',
+          fontWeight: '700',
+          letterSpacing: 0.2,
         },
       }}
     >
