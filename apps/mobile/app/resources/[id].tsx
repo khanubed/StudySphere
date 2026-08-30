@@ -4,7 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useGetResourceByIdQuery, useToggleLikeResourceMutation, useToggleBookmarkResourceMutation } from '../../src/store/api/resourceApi';
 import { ChevronLeft, ExternalLink, Heart, Bookmark, Share2 } from 'lucide-react-native';
-import { ThemeToggle } from '../../src/components/ThemeToggle';
 
 export default function ResourceDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -34,8 +33,9 @@ export default function ResourceDetailScreen() {
           <Text className="font-mono text-xs font-semibold text-ink">Back</Text>
         </TouchableOpacity>
 
-        <ThemeToggle size={13} className="w-7 h-7" />
+        <View className="w-7 h-7" />
       </View>
+
 
       <ScrollView className="flex-1 px-4 py-4 space-y-4" showsVerticalScrollIndicator={false}>
         {/* Title & Badge */}

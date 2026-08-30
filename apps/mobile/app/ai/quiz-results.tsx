@@ -15,9 +15,9 @@ import {
   Home,
   ChevronLeft,
 } from 'lucide-react-native';
-import { ThemeToggle } from '../../src/components/ThemeToggle';
 
 export default function QuizResultsScreen() {
+
   const router = useRouter();
   const { data: resultResponse, isLoading } = useGetQuizResultQuery('attempt-001');
   const result = resultResponse?.data;
@@ -40,8 +40,9 @@ export default function QuizResultsScreen() {
           <Text className="font-mono text-[9px] text-graphite uppercase">Grading Complete</Text>
         </View>
 
-        <ThemeToggle size={13} className="w-7 h-7" />
+        <View className="w-7 h-7" />
       </View>
+
 
       <ScrollView className="flex-1 px-4 py-3 space-y-3" showsVerticalScrollIndicator={false}>
         

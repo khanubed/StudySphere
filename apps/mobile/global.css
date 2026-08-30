@@ -1,6 +1,6 @@
 @tailwind base;
 @tailwind components;
-@tailwind utilities; 
+@tailwind utilities;
 
 @layer base {
   :root {
@@ -46,6 +46,48 @@
     --radius-modal: 1rem;
   }
 
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: 18 21 28;
+      --foreground: 243 244 239;
+      
+      --ink: 243 244 239;
+      --paper: 18 21 28;
+      --quad: 76 160 138;
+      --marker: 242 193 78;
+      --chalk: 130 160 240;
+      --graphite: 160 162 155;
+      
+      --primary: 76 160 138;
+      --primary-foreground: 18 21 28;
+      
+      --secondary: 35 38 44;
+      --secondary-foreground: 243 244 239;
+      
+      --muted: 35 38 44;
+      --muted-foreground: 160 162 155;
+      
+      --accent: 242 193 78;
+      --accent-foreground: 18 21 28;
+      
+      --destructive: 239 68 68;
+      --destructive-foreground: 18 21 28;
+      
+      --card: 28 31 38;
+      --card-foreground: 243 244 239;
+      
+      --popover: 28 31 38;
+      --popover-foreground: 243 244 239;
+      
+      --border: 55 58 53;
+      --input: 55 58 53;
+      --ring: 76 160 138;
+      
+      --success: 76 160 138;
+      --warning: 242 193 78;
+    }
+  }
+
   .dark {
     --background: 18 21 28;
     --foreground: 243 244 239;
@@ -84,84 +126,5 @@
     
     --success: 76 160 138;
     --warning: 242 193 78;
-  }
-}
-
-@layer utilities {
-  .text-ink {
-    color: rgb(var(--ink));
-  }
-  
-  .text-paper {
-    color: rgb(var(--paper));
-  }
-  
-  .text-quad {
-    color: rgb(var(--quad));
-  }
-  
-  .text-marker {
-    color: rgb(var(--marker));
-  }
-  
-  .text-chalk {
-    color: rgb(var(--chalk));
-  }
-  
-  .text-graphite {
-    color: rgb(var(--graphite));
-  }
-  
-  .bg-ink {
-    background-color: rgb(var(--ink));
-  }
-  
-  .bg-paper {
-    background-color: rgb(var(--paper));
-  }
-  
-  .bg-quad {
-    background-color: rgb(var(--quad));
-  }
-  
-  .bg-marker {
-    background-color: rgb(var(--marker));
-  }
-  
-  .bg-chalk {
-    background-color: rgb(var(--chalk));
-  }
-  
-  .bg-graphite {
-    background-color: rgb(var(--graphite));
-  }
-  
-  .border-ink {
-    border-color: rgb(var(--ink));
-  }
-
-  .border-paper {
-    border-color: rgb(var(--paper));
-  }
-
-  .border-quad {
-    border-color: rgb(var(--quad));
-  }
-  
-  .border-graphite {
-    border-color: rgb(var(--graphite));
-  }
-  
-  .border-marker {
-    border-color: rgb(var(--marker));
-  }
-
-  .border-chalk {
-    border-color: rgb(var(--chalk));
-  }
-
-  .ledger-divider {
-    height: 1px;
-    background-color: rgb(var(--border));
   }
 }

@@ -43,10 +43,10 @@ import {
   Copy,
   Check,
 } from 'lucide-react-native';
-import { ThemeToggle } from '../../src/components/ThemeToggle';
 import { SummaryDepth } from '@studysphere/shared-types';
 
 export default function AISummarizerScreen() {
+
   const router = useRouter();
   const dispatch = useAppDispatch();
   const {
@@ -111,7 +111,6 @@ export default function AISummarizerScreen() {
         </TouchableOpacity>
 
         <View className="flex-row items-center gap-1.5">
-          <ThemeToggle size={13} className="w-7 h-7" />
           <TouchableOpacity
             onPress={() => setIsHistoryModalOpen(true)}
             className="p-1 rounded-[4px] border border-border bg-secondary/20"
@@ -120,6 +119,7 @@ export default function AISummarizerScreen() {
           </TouchableOpacity>
         </View>
       </View>
+
 
       <ScrollView
         className="flex-1 px-4 py-3"

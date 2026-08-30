@@ -28,9 +28,9 @@ import {
   Send,
   Grid,
 } from 'lucide-react-native';
-import { ThemeToggle } from '../../src/components/ThemeToggle';
 
 export default function QuizAttemptScreen() {
+
   const router = useRouter();
   const dispatch = useAppDispatch();
 

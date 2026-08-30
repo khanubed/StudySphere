@@ -27,7 +27,6 @@ import {
   CreditCard,
   Building,
   ChevronDown,
-  ChevronRight,
   FileCheck,
   FileSearch,
   Zap,
@@ -47,7 +46,6 @@ interface NavItem {
   path: string;
   label: string;
   icon: React.ElementType;
-  children?: SubNavItem[];
 }
 
 export const MainLayout: React.FC = () => {
@@ -57,8 +55,7 @@ export const MainLayout: React.FC = () => {
   const { sidebarOpen, theme } = useSelector((state: RootState) => state.ui);
   const { user } = useSelector((state: RootState) => state.auth);
 
-  // AI Suite Accordion State
-  const [aiMenuOpen, setAiMenuOpen] = useState(true);
+  // Quick switcher dropdown state in top bar
   const [aiQuickSwitcherOpen, setAiQuickSwitcherOpen] = useState(false);
   const switcherRef = useRef<HTMLDivElement>(null);
 
@@ -143,12 +140,8 @@ export const MainLayout: React.FC = () => {
         { path: '/faculty', label: 'Faculty Overview', icon: LayoutDashboard },
         { path: '/faculty/announcements', label: 'Announcements', icon: Megaphone },
         { path: '/faculty/resources', label: 'Course Resources', icon: BookOpen },
-        {
-          path: '/ai',
-          label: 'AI Study Suite',
-          icon: Sparkles,
-          children: aiToolsList,
-        },
+        { path: '/planner', label: 'Study Planner', icon: Calendar },
+        { path: '/ai', label: 'AI Study Suite', icon: Sparkles },
         { path: '/faculty/quizzes/new', label: 'AI Quiz Creation', icon: Brain },
         { path: '/faculty/analytics', label: 'Class Analytics', icon: BarChart2 },
         { path: '/live-quiz/join', label: 'Live Quiz', icon: Radio },
@@ -159,13 +152,9 @@ export const MainLayout: React.FC = () => {
     // Default: student / alumni
     return [
       { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+      { path: '/planner', label: 'Study Planner', icon: Calendar },
       { path: '/resources', label: 'Resource Hub', icon: BookOpen },
-      {
-        path: '/ai',
-        label: 'AI Study Suite',
-        icon: Sparkles,
-        children: aiToolsList,
-      },
+      { path: '/ai', label: 'AI Study Suite', icon: Sparkles },
       { path: '/career', label: 'Career Hub', icon: Briefcase },
       { path: '/alumni', label: 'Alumni Connect', icon: Users },
       { path: '/coding', label: 'Coding Hub', icon: Code },
@@ -173,6 +162,7 @@ export const MainLayout: React.FC = () => {
       { path: '/profile', label: 'Profile', icon: User },
       { path: '/billing', label: 'Billing & Plans', icon: Wallet },
     ];
+
   };
 
   const navItems = getNavItems();
@@ -227,95 +217,11 @@ export const MainLayout: React.FC = () => {
           <nav className="p-2 space-y-1 overflow-y-auto flex-1 custom-scrollbar">
             {navItems.map((item) => {
               const Icon = item.icon;
-
-              // Check if item has children (AI Suite)
-              if (item.children) {
-                return (
-                  <div key={item.label} className="space-y-1 pt-1 pb-1">
-                    {/* Header Link */}
-                    <div
-                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                        isAiRoute
-                          ? 'bg-chalk/10 text-chalk font-semibold border border-chalk/30'
-                          : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
-                      }`}
-                    >
-                      <Link
-                        to="/ai"
-                        className="flex items-center gap-3 flex-1 truncate"
-                        title={!sidebarOpen ? item.label : undefined}
-                      >
-                        <Icon className={`w-5 h-5 shrink-0 ${isAiRoute ? 'text-chalk' : ''}`} />
-                        {sidebarOpen && <span>{item.label}</span>}
-                      </Link>
-                      {sidebarOpen && (
-                        <button
-                          type="button"
-                          onClick={() => setAiMenuOpen(!aiMenuOpen)}
-                          className="p-1 hover:bg-secondary/40 rounded flex items-center gap-1"
-                        >
-                          <span className="font-mono text-[9px] font-bold uppercase px-1 py-0.2 rounded bg-chalk/20 text-chalk">
-                            {item.children.length}
-                          </span>
-                          {aiMenuOpen ? (
-                            <ChevronDown className="w-3.5 h-3.5 text-graphite" />
-                          ) : (
-                            <ChevronRight className="w-3.5 h-3.5 text-graphite" />
-                          )}
-                        </button>
-                      )}
-                    </div>
-
-                    {/* Sub-tools Accordion (When expanded) */}
-                    {sidebarOpen && aiMenuOpen && (
-                      <div className="pl-6 pr-1 space-y-0.5 border-l-2 border-chalk/20 ml-5 my-1">
-                        {item.children.map((sub) => {
-                          const SubIcon = sub.icon;
-                          const isSubActive =
-                            sub.path === '/ai/quiz/new'
-                              ? location.pathname === '/ai/quiz/new' ||
-                                (location.pathname.startsWith('/quiz') &&
-                                  !location.pathname.includes('history'))
-                              : location.pathname.startsWith(sub.path);
-
-                          return (
-                            <Link
-                              key={sub.path}
-                              to={sub.path}
-                              className={`flex items-center justify-between px-2.5 py-1.5 rounded-md text-xs transition-all ${
-                                isSubActive
-                                  ? 'bg-chalk text-white font-bold shadow-xs'
-                                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
-                              }`}
-                            >
-                              <div className="flex items-center gap-2 truncate">
-                                <SubIcon className="w-3.5 h-3.5 shrink-0" />
-                                <span className="truncate">{sub.label}</span>
-                              </div>
-                              {sub.badge && (
-                                <span
-                                  className={`font-mono text-[8px] uppercase px-1 rounded ${
-                                    isSubActive
-                                      ? 'bg-white/20 text-white'
-                                      : 'bg-secondary/40 text-graphite'
-                                  }`}
-                                >
-                                  {sub.badge}
-                                </span>
-                              )}
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                );
-              }
-
-              // Standard Navigation Items
               const isActive =
                 item.path === '/dashboard' || item.path === '/admin' || item.path === '/faculty'
                   ? location.pathname === item.path
+                  : item.path === '/ai'
+                  ? isAiRoute
                   : location.pathname.startsWith(item.path);
 
               return (
