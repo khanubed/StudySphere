@@ -11,53 +11,53 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: 'rgb(var(--background))',
-        foreground: 'rgb(var(--foreground))',
-        ink: 'rgb(var(--ink))',
-        paper: 'rgb(var(--paper))',
-        quad: 'rgb(var(--quad))',
-        marker: 'rgb(var(--marker))',
-        chalk: 'rgb(var(--chalk))',
-        graphite: 'rgb(var(--graphite))',
+        background: 'rgb(var(--background) / <alpha-value>)',
+        foreground: 'rgb(var(--foreground) / <alpha-value>)',
+        ink: 'rgb(var(--ink) / <alpha-value>)',
+        paper: 'rgb(var(--paper) / <alpha-value>)',
+        quad: 'rgb(var(--quad) / <alpha-value>)',
+        marker: 'rgb(var(--marker) / <alpha-value>)',
+        chalk: 'rgb(var(--chalk) / <alpha-value>)',
+        graphite: 'rgb(var(--graphite) / <alpha-value>)',
         primary: {
-          DEFAULT: 'rgb(var(--primary))',
-          foreground: 'rgb(var(--primary-foreground))',
+          DEFAULT: 'rgb(var(--primary) / <alpha-value>)',
+          foreground: 'rgb(var(--primary-foreground) / <alpha-value>)',
         },
         secondary: {
-          DEFAULT: 'rgb(var(--secondary))',
-          foreground: 'rgb(var(--secondary-foreground))',
+          DEFAULT: 'rgb(var(--secondary) / <alpha-value>)',
+          foreground: 'rgb(var(--secondary-foreground) / <alpha-value>)',
         },
         muted: {
-          DEFAULT: 'rgb(var(--muted))',
-          foreground: 'rgb(var(--muted-foreground))',
+          DEFAULT: 'rgb(var(--muted) / <alpha-value>)',
+          foreground: 'rgb(var(--muted-foreground) / <alpha-value>)',
         },
         accent: {
-          DEFAULT: 'rgb(var(--accent))',
-          foreground: 'rgb(var(--accent-foreground))',
+          DEFAULT: 'rgb(var(--accent) / <alpha-value>)',
+          foreground: 'rgb(var(--accent-foreground) / <alpha-value>)',
         },
         destructive: {
-          DEFAULT: 'rgb(var(--destructive))',
-          foreground: 'rgb(var(--destructive-foreground))',
+          DEFAULT: 'rgb(var(--destructive) / <alpha-value>)',
+          foreground: 'rgb(var(--destructive-foreground) / <alpha-value>)',
         },
         card: {
-          DEFAULT: 'rgb(var(--card))',
-          foreground: 'rgb(var(--card-foreground))',
+          DEFAULT: 'rgb(var(--card) / <alpha-value>)',
+          foreground: 'rgb(var(--card-foreground) / <alpha-value>)',
         },
         popover: {
-          DEFAULT: 'rgb(var(--popover))',
-          foreground: 'rgb(var(--popover-foreground))',
+          DEFAULT: 'rgb(var(--popover) / <alpha-value>)',
+          foreground: 'rgb(var(--popover-foreground) / <alpha-value>)',
         },
-        border: 'rgb(var(--border))',
-        input: 'rgb(var(--input))',
-        ring: 'rgb(var(--ring))',
-        success: 'rgb(var(--success))',
-        warning: 'rgb(var(--warning))',
+        border: 'rgb(var(--border) / <alpha-value>)',
+        input: 'rgb(var(--input) / <alpha-value>)',
+        ring: 'rgb(var(--ring) / <alpha-value>)',
+        success: 'rgb(var(--success) / <alpha-value>)',
+        warning: 'rgb(var(--warning) / <alpha-value>)',
       },
       fontFamily: {
         display: ['var(--font-display)', 'Fraunces', 'Georgia', 'serif'],
         sans: ['var(--font-sans)', 'Geist', 'system-ui', 'sans-serif'],
         body: ['var(--font-body)', 'Inter', 'system-ui', 'sans-serif'],
-        mono: ['var(--font-mono)', 'Geist Mono', 'SF Mono', 'monospace'],
+        mono: ['var(--font-mono)', 'Geist Mono', 'IBM Plex Mono', 'SF Mono', 'monospace'],
         code: ['var(--font-code)', 'IBM Plex Mono', 'monospace'],
       },
       borderRadius: {
@@ -70,6 +70,14 @@ export default {
         modal: borderRadius.modal,
       },
       spacing: spacing.scale,
+      backgroundImage: {
+        'ledger-grid': 'linear-gradient(to right, rgba(138, 141, 133, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(138, 141, 133, 0.1) 1px, transparent 1px)',
+      },
+      backgroundSize: {
+        'grid-sm': '24px 24px',
+        'grid-md': '32px 32px',
+        'grid-lg': '48px 48px',
+      },
       keyframes: {
         'accordion-down': {
           from: { height: '0' },
@@ -99,6 +107,10 @@ export default {
           from: { opacity: '0', transform: 'scale(0.5) rotate(-10deg)' },
           to: { opacity: '1', transform: 'scale(1) rotate(0)' },
         },
+        'pulse-subtle': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.4' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -108,8 +120,9 @@ export default {
         'divider-draw': 'divider-draw 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
         'fade-up': 'fade-up 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
         'stamp-in': 'stamp-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+        'pulse-subtle': 'pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
     },
   },
   plugins: [tailwindcssAnimate],
-}
+};

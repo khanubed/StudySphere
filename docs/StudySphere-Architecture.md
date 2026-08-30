@@ -1,7 +1,7 @@
 # Architecture.md — StudySphere
 
 ## 1. Tech Stack
-**Web**: Next.js 15 (App Router) + React 19 · TypeScript · Tailwind CSS · ShadCN UI (Radix) · Redux Toolkit · RTK Query · React Hook Form + Zod · Recharts · Framer Motion.
+**Web**: React 19 (Vite) · TypeScript · Tailwind CSS · ShadCN UI (Radix) · React Router · Redux Toolkit · RTK Query · React Hook Form + Zod · Recharts · Framer Motion.
 
 **Mobile**: React Native + Expo · TypeScript · Redux Toolkit + RTK Query · React Navigation (native-stack + bottom-tabs) · redux-persist + Expo SQLite (offline) · Expo Notifications (push).
 
@@ -13,7 +13,7 @@
 ```
 studysphere/
   apps/
-    web/        # Next.js — app/ (route groups: public, student, faculty, admin)
+    web/        # React (Vite) — src/ (layouts/routes: public, student, faculty, admin)
     mobile/     # Expo — screens/, navigation per role
     api/        # Express — routes/, controllers/, services/, workers/, middlewares/, prisma/
   packages/
@@ -35,7 +35,7 @@ A monorepo matters specifically because 3 developers share Zod schemas, Prisma t
 5. Every AI-consuming request passes through the token-limit check (see §9) before any inference call is made.
 
 ## 4. Routing (see also Routes.md for full detail)
-- **Web** (Next.js App Router, route groups): `(public)` — landing/pricing/career listings/coding catalog (SSR/SSG for SEO); `(student)`, `(faculty)`, `(admin)` — protected, role-guarded groups.
+- **Web** (React Router): Public routes/layout — landing/pricing/career listings/coding catalog; Protected route layouts (`student`, `faculty`, `admin`) wrapped with role-based auth guards.
 - **Mobile** (React Navigation): Auth stack ↔ App stack (bottom-tabs, role-aware tab set), each tab with its own nested stack.
 
 ## 5. State Management
@@ -64,7 +64,7 @@ Model tiering: cheap/fast model for short/simple jobs (single regen, short snipp
 Plans: **Free / Pro (Student) / Institution** — each with a monthly weighted AI-token allowance, stored in a `plans` table (config, not code) so pricing/limits are editable from Admin without a deploy. Every AI action has a weight (e.g. flashcard regen = 1 credit, full resume analysis = 10 credits) recorded on `ai_generations` at request time — locked in, never retroactively changed by later weight-table edits. Institution plans pool usage across all seats.
 
 ## 10. SEO Approach (Web)
-Next.js SSR/SSG for every public-indexable route (landing, pricing, career listings/detail, coding catalog/problem pages, public resource pages) — this is the core reason the web app is Next.js rather than plain React. Metadata via the App Router's `generateMetadata` API, JSON-LD structured data (JobPosting, LearningResource, BreadcrumbList), auto-generated sitemap.xml, robots.txt excluding all authenticated routes. Full detail in SeoGuide.md.
+SPA SEO & Pre-rendering for public-indexable routes (landing, pricing, career listings/detail, coding catalog/problem pages, public resource pages). Dynamic meta tags via `react-helmet-async` / OpenGraph tags, static HTML pre-rendering / SSG for public pages (e.g. Vite SSG / prerender plugins), JSON-LD structured data (JobPosting, LearningResource, BreadcrumbList), static sitemap.xml, and robots.txt excluding all authenticated routes. Full detail in SeoGuide.md.
 
 ## 11. Mobile-Specific Notes
 Offline: RTK Query cache persisted via redux-persist + AsyncStorage; Study Planner and Coding Hub progress queue locally (Expo SQLite outbox) when offline and sync on reconnect. AI-generation requests are **never** queued offline — they require a live connection, since silently queuing a token-costed action risks confusing charges. Deep linking: `studysphere://` scheme mapped 1:1 to equivalent web routes.

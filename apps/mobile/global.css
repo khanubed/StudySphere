@@ -1,6 +1,6 @@
 @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; 
 
 @layer base {
   :root {
@@ -84,5 +84,84 @@
     
     --success: 76 160 138;
     --warning: 242 193 78;
+  }
+}
+
+@layer utilities {
+  .text-ink {
+    color: rgb(var(--ink));
+  }
+  
+  .text-paper {
+    color: rgb(var(--paper));
+  }
+  
+  .text-quad {
+    color: rgb(var(--quad));
+  }
+  
+  .text-marker {
+    color: rgb(var(--marker));
+  }
+  
+  .text-chalk {
+    color: rgb(var(--chalk));
+  }
+  
+  .text-graphite {
+    color: rgb(var(--graphite));
+  }
+  
+  .bg-ink {
+    background-color: rgb(var(--ink));
+  }
+  
+  .bg-paper {
+    background-color: rgb(var(--paper));
+  }
+  
+  .bg-quad {
+    background-color: rgb(var(--quad));
+  }
+  
+  .bg-marker {
+    background-color: rgb(var(--marker));
+  }
+  
+  .bg-chalk {
+    background-color: rgb(var(--chalk));
+  }
+  
+  .bg-graphite {
+    background-color: rgb(var(--graphite));
+  }
+  
+  .border-ink {
+    border-color: rgb(var(--ink));
+  }
+
+  .border-paper {
+    border-color: rgb(var(--paper));
+  }
+
+  .border-quad {
+    border-color: rgb(var(--quad));
+  }
+  
+  .border-graphite {
+    border-color: rgb(var(--graphite));
+  }
+  
+  .border-marker {
+    border-color: rgb(var(--marker));
+  }
+
+  .border-chalk {
+    border-color: rgb(var(--chalk));
+  }
+
+  .ledger-divider {
+    height: 1px;
+    background-color: rgb(var(--border));
   }
 }

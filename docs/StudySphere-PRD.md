@@ -1,7 +1,7 @@
 # PRD.md — StudySphere
 
 ## 1. Vision
-To become the single most useful platform a student needs throughout their academic journey — one AI-powered ecosystem replacing the disconnected tools students currently juggle for notes, quizzes, planning, placement prep, and alumni networking. Available as a Web App (Next.js) and Mobile App (React Native/Expo).
+To become the single most useful platform a student needs throughout their academic journey — one AI-powered ecosystem replacing the disconnected tools students currently juggle for notes, quizzes, planning, placement prep, and alumni networking. Available as a Web App (React) and Mobile App (React Native/Expo).
 
 ## 2. Mission
 Give every student AI-augmented tools for learning, preparation, and career growth, while giving faculty and institutions a single place to manage academic content and engagement.
@@ -56,6 +56,6 @@ Freemium model: **Free / Pro (Student) / Institution** plan tiers, each with a m
 - GraphQL (REST only in v1).
 
 ## 10. Constraints
-- Web must be Next.js 15/React 19 (SEO-critical pages need SSR/SSG).
+- Web must be React 19 (SEO-critical pages need pre-rendering/SSG).
 - Mobile must be React Native/Expo, sharing types/schemas with web via a monorepo shared package.
 - AI layer: OpenAI (primary) + Gemini (fallback/cost-tiering) — cost must stay predictable via token limits + caching.
